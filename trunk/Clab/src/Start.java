@@ -21,13 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 public class Start
 {
-	private static final double version = 0.01;
+	private static final double version = 0.02;
 	
 	public static void main(String[] args) throws IOException
     {
         Adventure a = loadAdventure("TestAdventure");
         Command c = new Command(a);
         System.out.println("Clab - command line adventure builder - Version " + version + "\n");
+        System.out.println(a.getName() + "\n");
         while(true)
         {
             System.out.print(a.getCurrentPlace().getName() + ">");
@@ -40,21 +41,16 @@ public class Start
         }
     }
 
-    public static void testAdventure(Adventure a)
-    {
-        Command c = new Command(a);
-        c.runCommand("take", "key");
-        System.out.println("Testfall key==" + a.getInventory().getItem("key").getName());
-    }
-    
     
     public static Adventure loadAdventure(String name)
     {
         Adventure a = new Adventure(name);
-        Place buero = a.createStartPlace("office");
-        buero.createItem("key");
-        
-
+        Place office = a.createStartPlace("office");
+        office.createItem("key");
+        Item ticket = office.createItem("ticket");
+        Place home = a.createPlace("home");
+        Path bus = office.createPath("bus", home);
+        bus.setMandatoryItem(ticket, "Where is my ticket?");
         return a;
     }
 }

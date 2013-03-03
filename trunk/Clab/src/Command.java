@@ -35,31 +35,65 @@ public class Command
         if (st.hasMoreTokens()) 
         {
             command = st.nextToken(); 
-            String result = runCommand(command);
-            if (result.length()>0) return result;
-            if (st.hasMoreTokens()) 
-            {   
-                parameter = st.nextToken(); 
-                return runCommand(command, parameter);
-            }
+            try 
+            {
+				if (st.hasMoreTokens()) 
+				{   
+				    parameter = st.nextToken(); 
+				    String result = runCommand(command, parameter);
+				    if (result.length()>0) return result;
+				}
+				else
+				{
+					String result = runCommand(command);
+				    if (result.length()>0) return result;
+				}
+			} 
+            catch (NoSuchMethodException e) 
+            {
+            	return "Command " + command + " not found. Type '?' for help.";
+			}
         }
-        return "Command " + command + " not found";
+        return "Type '?' for help.";
     }
    
-    public String runCommand(String commandString)
+    public String runCommand(String commandString) throws NoSuchMethodException
     {
-         if (commandString.equals("list")) return listInventory(); 
-         return "";
+         if (commandString.equals("take"))
+         {
+        	 String items = listPlaceItems();
+        	 if (items.length()>0)
+        	 {
+        		 return "I can take: " + items;
+        	 }
+        	 else
+        	 {
+        		 return "Nothing to take here.";
+        	 }
+         }
+         if (commandString.equals("use")) return "I can use: " + listItems();
+         if (commandString.equals("goto"))
+         { 
+        	 String pathes = listPathNames();
+        	 if (pathes.length()>0)
+        	 {
+        		 return "I can go to: " + pathes;
+        	 }
+        	 else
+        	 {
+        		 return "I can't go to somewhere.";
+        	 }
+         }
+         throw new NoSuchMethodException();
     }
     
-    public String runCommand(String commandString, String parameter)
+    public String runCommand(String commandString, String parameter) throws NoSuchMethodException
     {
          if (commandString.equals("take")) return takeItem(parameter);
          if (commandString.equals("use")) return useItem(parameter);
          if (commandString.equals("goto")) return goTo(parameter); 
-         if (commandString.equals("list")) return listInventory(); 
          //if (commandString.equals("ask")) goTo(parameter);
-         return "Command " + commandString + " not found";
+         throw new NoSuchMethodException();
     }
     
     private String takeItem(String name)
@@ -67,7 +101,7 @@ public class Command
         Item i = adventure.getCurrentPlace().removeItem(name);
         if (i==null) return "Item '" + name + "' not found.";
     	adventure.getInventory().addItem(i);
-        return "Item '" + name + "' taken.";
+        return "'" + name + "' taken.";
     }
     
     private String useItem(String name)
@@ -79,13 +113,31 @@ public class Command
     
     private String goTo(String name)
     {
-        return "goto";
+        Path p = adventure.getCurrentPlace().getPath(name);
+    	if (p==null)
+    	{
+    		return "I don't know where '" + name + "' is.";
+    	}
+    	else
+    	{
+    		return p.changePlace(adventure);
+    	}
     }
     
-    private String listInventory()
+    private String listItems()
     {
-        String result = adventure.getInventory().getItemNames() + "\n";
-        result = result + adventure.getCurrentPlace().getItemNames();
+        String result = adventure.getInventory().getItemNames();
+        result = result + listPlaceItems();
         return result;
+    }
+    
+    private String listPathNames()
+    {
+    	return adventure.getCurrentPlace().getPathNames();
+    }
+    
+    private String listPlaceItems()
+    {
+        return adventure.getCurrentPlace().getItemNames();
     }
 }

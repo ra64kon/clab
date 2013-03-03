@@ -19,15 +19,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 public class Path
 {
     private String name;
+    private Place to;
+    private Item mandatoryItem;
+    private String missingItemText = "";
 
     /**
      * Constructor for objects of class Place
      */
-    public Path(String name)
+    public Path(String name, Place to)
     {
         this.name = name;
+        this.to = to;
     }
 
+    public void setMandatoryItem(Item mandatoryItem, String missingItemText)
+    {
+    	this.mandatoryItem = mandatoryItem;
+    	this.missingItemText = missingItemText;
+    }
+    
+    public String changePlace(Adventure a)
+    {
+    	if (mandatoryItem==null || a.getInventory().hasItem(mandatoryItem))
+    	{
+    		a.setCurrentPlace(to);
+    		return "Going to '" + to.getName() + "'";
+    	}
+    	else
+    	{
+   			return missingItemText;
+    	}
+    }
+    
+    
     public String getName()
     {
         return name;    

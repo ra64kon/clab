@@ -22,6 +22,7 @@ public class Place
 {
     private String name;
     private HashMap<String,Item> items = new HashMap<String,Item>();
+    private HashMap<String,Path> pathes = new HashMap<String,Path>();
     
     /**
      * Constructor for objects of class Place
@@ -41,10 +42,11 @@ public class Place
         items.put(i.getName(),i);    
     }
     
-    public void createItem(String name)
+    public Item createItem(String name)
     {
         Item i = new Item(name);
         items.put(i.getName(),i);
+        return i;
     }
     
     public Item removeItem(String name)
@@ -52,19 +54,50 @@ public class Place
         return items.remove(name);      
     }
     
+    public boolean hasItem(Item item)
+    {
+    	return items.containsValue(item);
+    }
+    
     public Item getItem(String name)
     {
         return items.get(name);    
     }
     
+    public Path getPath(String name)
+    {
+        return pathes.get(name);    
+    }
+    
     public String getItemNames()
     {
-        String names= name + ": ";
+        String names="";
         Iterator<String> i = items.keySet().iterator();
         while(i.hasNext())
         {
-            names = names + i.next() + " ";
+            names = names + i.next();
+            if (i.hasNext()) names = names + ", ";
         }    
         return names;
     }
+    
+    public String getPathNames()
+    {
+        String names="";
+        Iterator<String> i = pathes.keySet().iterator();
+        while(i.hasNext())
+        {
+            names = names + i.next();
+            if (i.hasNext()) names = names + ", ";
+        }    
+        return names;
+    }
+        
+    public Path createPath(String name, Place to)
+    {
+        Path p = new Path(name, to);
+        pathes.put(name, p);
+        return p;
+    }
+    
 }
