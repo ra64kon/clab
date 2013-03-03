@@ -24,6 +24,7 @@ public class Adventure
     private Place currentPlace;
     private HashMap<String,Place> places = new HashMap<String,Place>();
 
+   
     /**
      * Constructor for objects of class Place
      */
@@ -59,4 +60,9 @@ public class Adventure
     {
         return currentPlace;
     }   
+    
+    public void setCurrentPlace(Place place)
+    {
+        this.currentPlace = place;
+    } 
 }
