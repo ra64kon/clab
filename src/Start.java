@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 public class Start
 {
-	private static final double version = 0.02;
+	private static final double version = 0.03;
 	
 	public static void main(String[] args) throws IOException
     {

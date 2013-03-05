@@ -51,7 +51,7 @@ public class Command
 			} 
             catch (NoSuchMethodException e) 
             {
-            	return "Command " + command + " not found. Type '?' for help.";
+            	return "Command '" + command + "' not found. Type '?' for help.";
 			}
         }
         return "Type '?' for help.";
@@ -59,7 +59,15 @@ public class Command
    
     public String runCommand(String commandString) throws NoSuchMethodException
     {
-         if (commandString.equals("take"))
+    	if (commandString.equals("?"))
+    	{
+    		String help = "Type 'take <item>' to take an item.\n"
+    			    + "Type 'use <item>' to use an item.\n"
+    			    + "Type 'goto <place>' to change your place.\n\n"
+    			    + "Simply type 'take','use' or 'goto' to show what to take, to use or where to go.";
+    		return help;
+    	}
+    	if (commandString.equals("take"))
          {
         	 String items = listPlaceItems();
         	 if (items.length()>0)
