@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 public class Start
 {
-	private static final double version = 0.03;
+	private static final double version = 0.04;
 	
 	public static void main(String[] args) throws IOException
     {
@@ -45,12 +45,23 @@ public class Start
     public static Adventure loadAdventure(String name)
     {
         Adventure a = new Adventure(name);
-        Place office = a.createStartPlace("office");
-        office.createItem("key");
-        Item ticket = office.createItem("ticket");
+        Scene s1 = new Scene("I'm at the office. It feels, that I should not be here.");
+        final Place office = a.createStartPlace("office");
+        office.putItem(new Item("key",false, true));
+        office.putItem(new Item("desk", true, false));
+        final Item ticket = new Item("ticket", true, true);
         Place home = a.createPlace("home");
         Path bus = office.createPath("bus", home);
         bus.setMandatoryItem(ticket, "Where is my ticket?");
+        Action act = new Action("desk")
+        {
+        	protected void actions()
+        	{
+        		office.putItem(ticket);
+        	}
+        };
+        s1.addAction(act);
+        
         return a;
     }
 }
