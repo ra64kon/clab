@@ -42,16 +42,14 @@ public class Place
         items.put(i.getName(),i);    
     }
     
-    public Item createItem(String name)
+    public void putItem(Item i)
     {
-        Item i = new Item(name);
         items.put(i.getName(),i);
-        return i;
     }
     
     public Item removeItem(String name)
     {
-        return items.remove(name);      
+    	return items.remove(name);      
     }
     
     public boolean hasItem(Item item)

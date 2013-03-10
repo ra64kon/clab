@@ -106,8 +106,11 @@ public class Command
     
     private String takeItem(String name)
     {
-        Item i = adventure.getCurrentPlace().removeItem(name);
+        Item i = adventure.getCurrentPlace().getItem(name);
         if (i==null) return "Item '" + name + "' not found.";
+        if (!i.isAccessible()) return "Item '" + name + "' not accessible.";
+        if (!i.isTakable()) return "Item '" + name + "' is not takeable.";
+        adventure.getCurrentPlace().removeItem(name);
     	adventure.getInventory().addItem(i);
         return "'" + name + "' taken.";
     }
