@@ -31,7 +31,7 @@ public class Path
         this.name = name;
         this.to = to;
     }
-
+    
     public void setMandatoryItem(Item mandatoryItem, String missingItemText)
     {
     	this.mandatoryItem = mandatoryItem;

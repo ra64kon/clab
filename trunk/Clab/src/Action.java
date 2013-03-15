@@ -13,11 +13,11 @@ public abstract class Action
 		return this.parameter1.equals(parameter1);
 	}
 	
-	public void runActions()
+	public void runActions() throws NotFoundException
 	{
-		actions();
+		useActions();
 	}
 	
-	protected abstract void actions();
+	protected abstract void useActions() throws NotFoundException;
 	
 }
