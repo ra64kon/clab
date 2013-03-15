@@ -23,7 +23,7 @@ public class Adventure
     private Inventory inventory = new Inventory();
     private Place currentPlace;
     private HashMap<String,Place> places = new HashMap<String,Place>();
-
+    private HashMap<String,Item> items = new HashMap<String,Item>();
    
     /**
      * Constructor for objects of class Place
@@ -33,17 +33,22 @@ public class Adventure
         this.name = name;
     }
     
-    public Place createStartPlace(String name)
+    public void setStartPlace(String name) throws NotFoundException
     {
-        currentPlace = createPlace(name);
-        return currentPlace;
+        Place p = getPlace(name);
+    	currentPlace = p;
     }
     
-    public Place createPlace(String name)
+    public void createPlace(String name)
     {
         Place p = new Place(name);
         places.put(name, p);
-        return p;
+    }
+    
+    public void createItem(String name,boolean isAccessible, boolean isTakable)
+    {
+        Item i = new Item(name, isAccessible, isTakable);
+        items.put(name, i);
     }
     
     public String getName()
@@ -65,4 +70,18 @@ public class Adventure
     {
         this.currentPlace = place;
     } 
+    
+    public Place getPlace(String name) throws NotFoundException
+    {
+    	Place p = places.get(name);
+    	if (p==null) throw new NotFoundException("Place '" + name + "' not found.");
+    	else return p;
+    }
+    
+    public Item getItem(String name) throws NotFoundException
+    {
+    	Item i = items.get(name);
+    	if (i==null) throw new NotFoundException("Item '" + name + "' not found.");
+    	else return i;
+    }
 }

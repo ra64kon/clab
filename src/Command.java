@@ -111,7 +111,7 @@ public class Command
         if (!i.isAccessible()) return "Item '" + name + "' not accessible.";
         if (!i.isTakable()) return "Item '" + name + "' is not takeable.";
         adventure.getCurrentPlace().removeItem(name);
-    	adventure.getInventory().addItem(i);
+    	adventure.getInventory().putItem(i);
         return "'" + name + "' taken.";
     }
     

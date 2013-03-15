@@ -37,10 +37,6 @@ public class Place
         return name;    
     }
     
-    public void addItem(Item i)
-    {
-        items.put(i.getName(),i);    
-    }
     
     public void putItem(Item i)
     {
@@ -94,6 +90,14 @@ public class Place
     public Path createPath(String name, Place to)
     {
         Path p = new Path(name, to);
+        pathes.put(name, p);
+        return p;
+    }
+    
+    public Path createPath(String name, Place to, Item i, String missingItemText)
+    {
+        Path p = new Path(name, to);
+        p.setMandatoryItem(i, missingItemText);
         pathes.put(name, p);
         return p;
     }

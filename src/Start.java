@@ -21,43 +21,58 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 public class Start
 {
-	private static final double version = 0.04;
+	private static final double version = 0.05;
 	
 	public static void main(String[] args) throws IOException
     {
-        Adventure a = loadAdventure("TestAdventure");
-        Command c = new Command(a);
-        System.out.println("Clab - command line adventure builder - Version " + version + "\n");
-        System.out.println(a.getName() + "\n");
-        while(true)
-        {
-            System.out.print(a.getCurrentPlace().getName() + ">");
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String line = br.readLine();
-            if (line.equals("exit")) break;
-            String result = c.parseCommand(line);
-            System.out.println(result);
-            System.out.println();
-        }
+		System.out.println("Clab - command line adventure builder - Version " + version + "\n");
+		
+		try 
+		{
+			Adventure a = loadAdventure("TestAdventure");
+			Command c = new Command(a);
+	        System.out.println(a.getName() + "\n");
+	        while(true)
+	        {
+	            System.out.print(a.getCurrentPlace().getName() + ">");
+	            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	            String line = br.readLine();
+	            if (line.equals("exit")) break;
+	            String result = c.parseCommand(line);
+	            System.out.println(result);
+	            System.out.println();
+	        }
+		} 
+		catch (NotFoundException e) 
+		{
+			System.out.println("Cannot load Adventure: " + e.getMessage());
+		}
+        
     }
 
     
-    public static Adventure loadAdventure(String name)
+    public static Adventure loadAdventure(String name) throws NotFoundException
     {
         Adventure a = new Adventure(name);
         Scene s1 = new Scene("I'm at the office. It feels, that I should not be here.");
-        final Place office = a.createStartPlace("office");
-        office.putItem(new Item("key",false, true));
-        office.putItem(new Item("desk", true, false));
-        final Item ticket = new Item("ticket", true, true);
-        Place home = a.createPlace("home");
-        Path bus = office.createPath("bus", home);
-        bus.setMandatoryItem(ticket, "Where is my ticket?");
+        final Operations o = new Operations(a, s1);
+        a.createPlace("office");
+        a.setStartPlace("office");
+        a.createPlace("home");
+        
+        a.createItem("key",false, true);
+        a.createItem("desk", true, false);
+        a.createItem("ticket", true, true);
+        o.putItem("key", "office");
+        o.putItem("desk", "office");
+       
+        o.createPath("bus", "office", "home", "ticket", "Where is my ticket?");
+        
         Action act = new Action("desk")
         {
-        	protected void actions()
+        	protected void useActions() throws NotFoundException
         	{
-        		office.putItem(ticket);
+        		o.putItem("ticket", "office");
         	}
         };
         s1.addAction(act);
