@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /*
 Clab - command line adventure builder
@@ -22,8 +23,11 @@ public class Adventure
     private String name;
     private Inventory inventory = new Inventory();
     private Place currentPlace;
+    private Scene currentScene;
+    private boolean finished = false;
     private HashMap<String,Place> places = new HashMap<String,Place>();
     private HashMap<String,Item> items = new HashMap<String,Item>();
+    private LinkedList<Scene> scenes = new LinkedList<Scene>();
    
     /**
      * Constructor for objects of class Place
@@ -37,6 +41,30 @@ public class Adventure
     {
         Place p = getPlace(name);
     	currentPlace = p;
+    }
+    
+    public Scene createScene(String description)
+    {
+        Scene s = new Scene(description);
+        scenes.add(s);
+        return s;
+    }
+    
+    public void nextScene() 
+    {
+    	if (scenes.isEmpty()) finished = true;
+    	else currentScene = scenes.removeFirst();
+    }
+    
+    public boolean hasFinished()
+    {
+    	return finished;
+    }
+    
+    public Scene getCurrentScene() 
+    {
+    	if (currentScene==null) nextScene();
+    	return currentScene;
     }
     
     public void createPlace(String name)
@@ -71,17 +99,39 @@ public class Adventure
         this.currentPlace = place;
     } 
     
-    public Place getPlace(String name) throws NotFoundException
+    private Place getPlace(String name) throws NotFoundException
     {
     	Place p = places.get(name);
     	if (p==null) throw new NotFoundException("Place '" + name + "' not found.");
     	else return p;
     }
     
-    public Item getItem(String name) throws NotFoundException
+    private Item getItem(String name) throws NotFoundException
     {
     	Item i = items.get(name);
     	if (i==null) throw new NotFoundException("Item '" + name + "' not found.");
     	else return i;
+    }
+    
+    public void putItem(String item, String place) throws NotFoundException 
+    {
+        Place p = getPlace(place);   
+        Item i = getItem(item);
+        p.putItem(i);
+    }
+    
+    public void createPath(String name, String from, String to, String item, String missingItemText) throws NotFoundException 
+    {
+    	Place fromPlace = getPlace(from);  
+    	Place toPlace = getPlace(to);  
+    	Item i = getItem(item);
+    	fromPlace.createPath(name, toPlace, i, missingItemText);
+    }
+    
+    public void createPath(String name, String from, String to) throws NotFoundException 
+    {
+    	Place fromPlace = getPlace(from);  
+    	Place toPlace = getPlace(to);  
+        fromPlace.createPath(name, toPlace);
     }
 }

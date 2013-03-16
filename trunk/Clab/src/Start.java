@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 public class Start
 {
-	private static final double version = 0.05;
+	private static final double version = 0.06;
 	
 	public static void main(String[] args) throws IOException
     {
@@ -41,6 +41,11 @@ public class Start
 	            String result = c.parseCommand(line);
 	            System.out.println(result);
 	            System.out.println();
+	            if (a.hasFinished())
+	            {
+	            	System.out.println("The End.\n");
+	            	break;
+	            }
 	        }
 		} 
 		catch (NotFoundException e) 
@@ -53,29 +58,38 @@ public class Start
     
     public static Adventure loadAdventure(String name) throws NotFoundException
     {
-        Adventure a = new Adventure(name);
-        Scene s1 = new Scene("I'm at the office. It feels, that I should not be here.");
-        final Operations o = new Operations(a, s1);
+        final Adventure a = new Adventure(name);
+                
         a.createPlace("office");
         a.setStartPlace("office");
         a.createPlace("home");
         
-        a.createItem("key",false, true);
+        a.createItem("key",true, true);
         a.createItem("desk", true, false);
         a.createItem("ticket", true, true);
-        o.putItem("key", "office");
-        o.putItem("desk", "office");
-       
-        o.createPath("bus", "office", "home", "ticket", "Where is my ticket?");
         
-        Action act = new Action("desk")
-        {
-        	protected void useActions() throws NotFoundException
-        	{
-        		o.putItem("ticket", "office");
-        	}
-        };
-        s1.addAction(act);
+        Scene s1 = a.createScene("I'm at the office. It feels, that I should not be here."); 
+	        a.putItem("key", "office");
+	        a.putItem("desk", "office");
+	        a.createPath("bus", "office", "home", "ticket", "Where is my ticket?");
+	        Action act1 = new Action("desk")
+	        {
+	        	protected String useActions() throws NotFoundException
+	        	{
+	        		a.putItem("ticket", "office");
+	        		return "There is a ticket on the desk.";
+	        	}
+	        };
+	        s1.addAction(act1);
+	        Action act2 = new Action("key")
+	        {
+	        	protected String useActions() throws NotFoundException
+	        	{
+	        		
+	        		return "Open.";
+	        	}
+	        };
+	        s1.addAction(act2);
         
         return a;
     }

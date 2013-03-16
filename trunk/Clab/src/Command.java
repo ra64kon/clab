@@ -21,7 +21,6 @@ public class Command
 {
     private Adventure adventure;
 
-
     public Command(Adventure adventure)
     {
         this.adventure = adventure;
@@ -52,7 +51,11 @@ public class Command
             catch (NoSuchMethodException e) 
             {
             	return "Command '" + command + "' not found. Type '?' for help.";
-			}
+			} 
+            catch (NotFoundException e) 
+            {
+				return e.getMessage();
+			} 
         }
         return "Type '?' for help.";
     }
@@ -95,7 +98,7 @@ public class Command
          throw new NoSuchMethodException();
     }
     
-    public String runCommand(String commandString, String parameter) throws NoSuchMethodException
+    public String runCommand(String commandString, String parameter) throws NoSuchMethodException, NotFoundException
     {
          if (commandString.equals("take")) return takeItem(parameter);
          if (commandString.equals("use")) return useItem(parameter);
@@ -115,11 +118,18 @@ public class Command
         return "'" + name + "' taken.";
     }
     
-    private String useItem(String name)
+    private String useItem(String name) throws NotFoundException
     {
-        // 1. Check item in Inventar und aktuellem Place ob er direkt benutzt werden kann
-        // 2. Check ob item in einer Regel vorkommt und führe Regel aus
-        return "use";
+    	Item i = adventure.getCurrentPlace().getItem(name);
+        if (i==null) 
+        {
+        	i = adventure.getInventory().getItem(name);
+        	if (i==null) return "Item '" + name + "' not found.";
+        }
+        Scene scene = adventure.getCurrentScene();
+        String result = scene.runUseAction(name);
+        if (scene.hasFinished()) adventure.nextScene();
+        return result;
     }
     
     private String goTo(String name)
