@@ -1,23 +1,28 @@
 
 public abstract class Action 
 {
-	private String parameter1;
+	private String name;
 	
-	public Action(String parameter1) 
+	public Action(String name) 
 	{
-		this.parameter1 = parameter1;
+		this.name = name;
 	}
 	
 	public boolean useItem(String parameter1)
 	{
-		return this.parameter1.equals(parameter1);
+		return name.equals(parameter1);
 	}
 	
-	public void runActions() throws NotFoundException
+	public String runUseActions() throws NotFoundException
 	{
-		useActions();
+		return useActions();
 	}
 	
-	protected abstract void useActions() throws NotFoundException;
+	protected abstract String useActions() throws NotFoundException;
+	
+	public String getName()
+	{
+		return name;
+	}
 	
 }
