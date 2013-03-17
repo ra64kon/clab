@@ -19,14 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 public class Item
 {
     private String name;
-    private boolean isAccessible = true;
     private boolean isTakable = true;
     
     
     public Item(String name, boolean isAccessible, boolean isTakable)
     {
         this.name = name;
-        this.isAccessible = isAccessible;
+        //this.isAccessible = isAccessible;
         this.isTakable = isTakable;
     }
 
@@ -35,21 +34,13 @@ public class Item
         return name;    
     }
 
-	public boolean isAccessible() 
+	public boolean isTakable() 
 	{
-		return isAccessible;
-	}
-
-	public void setAccessible(boolean isAccessible) 
-	{
-		this.isAccessible = isAccessible;
-	}
-
-	public boolean isTakable() {
 		return isTakable;
 	}
 
-	public void setTakable(boolean isTakable) {
+	public void setTakable(boolean isTakable) 
+	{
 		this.isTakable = isTakable;
 	}
 }

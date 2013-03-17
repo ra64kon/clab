@@ -20,7 +20,7 @@ public class Path
 {
     private String name;
     private Place to;
-    private Item mandatoryItem;
+    private Item requiredItem;
     private String missingItemText = "";
 
     /**
@@ -32,15 +32,15 @@ public class Path
         this.to = to;
     }
     
-    public void setMandatoryItem(Item mandatoryItem, String missingItemText)
+    public void setRequiredItem(Item requiredItem, String missingItemText)
     {
-    	this.mandatoryItem = mandatoryItem;
+    	this.requiredItem = requiredItem;
     	this.missingItemText = missingItemText;
     }
     
     public String changePlace(Adventure a)
     {
-    	if (mandatoryItem==null || a.getInventory().hasItem(mandatoryItem))
+    	if (requiredItem==null || a.getInventory().hasItem(requiredItem))
     	{
     		a.setCurrentPlace(to);
     		return "Going to '" + to.getName() + "'";

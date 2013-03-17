@@ -24,10 +24,9 @@ public class Adventure
     private Inventory inventory = new Inventory();
     private Place currentPlace;
     private Scene currentScene;
-    private boolean finished = false;
     private HashMap<String,Place> places = new HashMap<String,Place>();
     private HashMap<String,Item> items = new HashMap<String,Item>();
-    private LinkedList<Scene> scenes = new LinkedList<Scene>();
+    private LinkedList<Scene> story = new LinkedList<Scene>();
    
     /**
      * Constructor for objects of class Place
@@ -46,19 +45,21 @@ public class Adventure
     public Scene createScene(String description)
     {
         Scene s = new Scene(description);
-        scenes.add(s);
+        story.add(s);
         return s;
     }
     
-    public void nextScene() 
+    public boolean nextScene() 
     {
-    	if (scenes.isEmpty()) finished = true;
-    	else currentScene = scenes.removeFirst();
-    }
-    
-    public boolean hasFinished()
-    {
-    	return finished;
+    	if (story.isEmpty())
+    	{
+    		return false;
+    	}
+    	else
+    	{
+    		currentScene = story.removeFirst();
+    		return true;
+    	}
     }
     
     public Scene getCurrentScene() 

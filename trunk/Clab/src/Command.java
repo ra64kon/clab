@@ -111,7 +111,6 @@ public class Command
     {
         Item i = adventure.getCurrentPlace().getItem(name);
         if (i==null) return "Item '" + name + "' not found.";
-        if (!i.isAccessible()) return "Item '" + name + "' not accessible.";
         if (!i.isTakable()) return "Item '" + name + "' is not takeable.";
         adventure.getCurrentPlace().removeItem(name);
     	adventure.getInventory().putItem(i);
@@ -127,9 +126,7 @@ public class Command
         	if (i==null) return "Item '" + name + "' not found.";
         }
         Scene scene = adventure.getCurrentScene();
-        String result = scene.runUseAction(name);
-        if (scene.hasFinished()) adventure.nextScene();
-        return result;
+        return scene.runUseAction(name);
     }
     
     private String goTo(String name)
