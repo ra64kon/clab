@@ -97,7 +97,7 @@ public class Place
     public Path createPath(String name, Place to, Item i, String missingItemText)
     {
         Path p = new Path(name, to);
-        p.setMandatoryItem(i, missingItemText);
+        p.setRequiredItem(i, missingItemText);
         pathes.put(name, p);
         return p;
     }

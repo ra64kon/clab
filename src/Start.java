@@ -21,32 +21,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 public class Start
 {
-	private static final double version = 0.06;
+	private static final double version = 0.07;
 	
 	public static void main(String[] args) throws IOException
     {
 		System.out.println("Clab - command line adventure builder - Version " + version + "\n");
-		
 		try 
 		{
 			Adventure a = loadAdventure("TestAdventure");
 			Command c = new Command(a);
 	        System.out.println(a.getName() + "\n");
-	        while(true)
+	        while(a.nextScene())
 	        {
-	            System.out.print(a.getCurrentPlace().getName() + ">");
-	            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	            String line = br.readLine();
-	            if (line.equals("exit")) break;
-	            String result = c.parseCommand(line);
-	            System.out.println(result);
-	            System.out.println();
-	            if (a.hasFinished())
-	            {
-	            	System.out.println("The End.\n");
-	            	break;
+	            Scene s = a.getCurrentScene();
+	            System.out.println(s.getDescription() + "\n");
+	            while(!s.hasFinished())
+	            {	
+		        	System.out.print(a.getCurrentPlace().getName() + ">");
+		            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		            String line = br.readLine();
+		            if (line.equals("exit")) break;
+		            String result = c.parseCommand(line);
+		            System.out.println(result + "\n");
 	            }
+	            a.nextScene();
 	        }
+	        System.out.println("The End.\n");    
 		} 
 		catch (NotFoundException e) 
 		{
@@ -64,7 +64,7 @@ public class Start
         a.setStartPlace("office");
         a.createPlace("home");
         
-        a.createItem("key",true, true);
+        a.createItem("key",false, true);
         a.createItem("desk", true, false);
         a.createItem("ticket", true, true);
         
