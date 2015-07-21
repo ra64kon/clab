@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /*
 Clab - command line adventure builder
-Copyright (C) 2015, ra64kon
+Copyright (C) 2015, ra64kon ,
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
